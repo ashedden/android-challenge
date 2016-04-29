@@ -25,3 +25,5 @@ Sources used for help and instruction:
     https://www.youtube.com/channel/UC-1b6coI0pJxDKdDT-v-Dww
 
     https://www.londonappdeveloper.com/how-to-use-git-hub-with-android-studio/
+    
+    https://github.com/nostra13/Android-Universal-Image-Loader
