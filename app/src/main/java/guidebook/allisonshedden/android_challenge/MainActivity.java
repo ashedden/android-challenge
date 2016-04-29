@@ -1,15 +1,25 @@
 package guidebook.allisonshedden.android_challenge;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,21 +32,37 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import guidebook.allisonshedden.android_challenge.models.DataModel;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvData;
+    private ListView lvData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .defaultDisplayImageOptions(defaultOptions)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        lvData = (ListView)findViewById(R.id.lvData);
+
         //Make buttons and Text View
         Button btnHit = (Button)findViewById(R.id.btnGetInfo);
-        tvData = (TextView)findViewById(R.id.tvJsonItem);
-        tvData.setMovementMethod(new ScrollingMovementMethod());
+//        tvData = (TextView)findViewById(R.id.tvJsonItem);
+//        tvData.setMovementMethod(new ScrollingMovementMethod());
 
         btnHit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public class JSONTask extends AsyncTask<String, String, String> {
+    public class JSONTask extends AsyncTask<String, String, List<DataModel>> {
         @Override
-        protected String doInBackground(String... params) {
+        protected List<DataModel> doInBackground(String... params) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
@@ -72,24 +98,19 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject parentObject = new JSONObject(finalJson);
                 JSONArray parentArray = parentObject.getJSONArray("data");
 
-                StringBuffer finalBufferedData = new StringBuffer();
-
-                //Read-in length of array
+                List<DataModel> dataModelList = new ArrayList<>();
                 for(int i=0; i<parentArray.length(); i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
-                    //Gather data items
-                    String startDate = finalObject.getString("startDate");
-                    String endDate = finalObject.getString("endDate");
-                    String name = finalObject.getString("name");
-                    String gburl = finalObject.getString("url");
-                    String venue = finalObject.getString("venue");
-                    String icon = finalObject.getString("icon");
+                    DataModel dataModel = new DataModel();
+                    dataModel.setStartDate(finalObject.getString("startDate"));
+                    dataModel.setEndDate(finalObject.getString("endDate"));
+                    dataModel.setName(finalObject.getString("name"));
+                    dataModel.setUrl(finalObject.getString("url"));
+                    dataModel.setIcon(finalObject.getString("icon"));
 
-                    //Style and append data to buffer
-                    finalBufferedData.append("Event #"+ (i+1) +"\nStart Date: " + startDate + "\nEnd Date: " + endDate + "\nName: " + name +
-                            "\nUrl: " + gburl + "\nVenue: " + venue + "\nIcon: " + icon + "\n\n");
+                    dataModelList.add(dataModel);
                 }
-                return finalBufferedData.toString();
+                return dataModelList;
 
                 //Catch all the exceptions
             } catch (MalformedURLException e) {
@@ -113,10 +134,11 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(List<DataModel> result){
             super.onPostExecute(result);
-            //Change text to JSON info
-            tvData.setText(result);
+//            tvData.setText(result);
+            DataAdapter adapter = new DataAdapter(getApplicationContext(), R.layout.eventwithicon, result);
+            lvData.setAdapter(adapter);
         }
     }
 
@@ -137,4 +159,45 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public class DataAdapter extends ArrayAdapter {
+
+        public List<DataModel> dataModelList;
+        private int resource;
+        private LayoutInflater inflater;
+        public DataAdapter(Context context, int resource, List<DataModel> objects) {
+            super(context, resource, objects);
+            dataModelList = objects;
+            this.resource = resource;
+            inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+
+            if(convertView == null){
+                convertView = inflater.inflate(resource, null);
+            }
+
+            ImageView ivIcon;
+            TextView tvName;
+            TextView tvDate;
+            TextView tvUrl;
+
+            ivIcon = (ImageView)convertView.findViewById(R.id.ivIcon);
+            tvName = (TextView)convertView.findViewById(R.id.tvName);
+            tvDate = (TextView)convertView.findViewById(R.id.tvDate);
+            tvUrl = (TextView)convertView.findViewById(R.id.tvUrl);
+
+            ImageLoader.getInstance().displayImage(dataModelList.get(position).getIcon(), ivIcon);
+
+            tvName.setText(dataModelList.get(position).getName());
+            tvDate.setText(dataModelList.get(position).getStartDate() + " - " + dataModelList.get(position).getEndDate());
+            tvUrl.setText("https://guidebook.com/" + dataModelList.get(position).getUrl());
+
+            return convertView;
+        }
+    }
+
 }
