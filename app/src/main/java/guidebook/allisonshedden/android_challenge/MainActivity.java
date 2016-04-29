@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -193,8 +195,12 @@ public class MainActivity extends AppCompatActivity {
             ImageLoader.getInstance().displayImage(dataModelList.get(position).getIcon(), ivIcon);
 
             tvName.setText(dataModelList.get(position).getName());
-            tvDate.setText(dataModelList.get(position).getStartDate() + " - " + dataModelList.get(position).getEndDate());
-            tvUrl.setText("https://guidebook.com/" + dataModelList.get(position).getUrl());
+            tvDate.setText("Dates:  " + dataModelList.get(position).getStartDate() + " - " + dataModelList.get(position).getEndDate());
+
+//            link.setText(Html.fromHtml(linkText));
+            tvUrl.setText("URL:  " + Html.fromHtml("https://guidebook.com" + dataModelList.get(position).getUrl()));
+//            link.setMovementMethod(LinkMovementMethod.getInstance());
+            tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
 
             return convertView;
         }

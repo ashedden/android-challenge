@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="5dip"
-            android:paddingTop="22dip"
+            android:paddingTop="23dip"
             android:gravity="center">
 
             <TextView
@@ -45,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/event_url"
-                android:id="@+id/tvUrl" />
+                android:id="@+id/tvUrl"
+                android:autoLink="web"/>
 
         </LinearLayout>
     </LinearLayout>
