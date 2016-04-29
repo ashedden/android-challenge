@@ -2,5 +2,6 @@
     <string name="app_name">Android-challenge</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="get_info">Get Info</string>
     <string name="action_settings">Settings</string>
 </resources>
