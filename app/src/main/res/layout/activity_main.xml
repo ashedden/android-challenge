@@ -12,7 +12,7 @@
     android:id="@+id/btnGetInfo"
     android:text="@string/get_info"/>
 
-    <TextView android:text="@string/hello_world"
+    <TextView
     android:id="@+id/tvJsonItem"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />

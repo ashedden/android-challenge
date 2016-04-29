@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
                 for(int i=0; i<parentArray.length(); i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
-                    DataModel movieModel = new DataModel();
 
                     String startDate = finalObject.getString("startDate");
                     String endDate = finalObject.getString("endDate");
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     String venue = finalObject.getString("venue");
                     String icon = finalObject.getString("icon");
 
-                    finalBufferedData.append(startDate + ", " + endDate + ", " + name + ", " + gburl + ", " + venue + ", " + icon + "\n\n");
+                    finalBufferedData.append("Start Date: " + startDate + "\nEnd Date: " + endDate + "\nName: " + name + "\nUrl: " + gburl + "\nVenue: " + venue + "\nIcon: " + icon + "\n\n");
                 }
                 return finalBufferedData.toString();
 
