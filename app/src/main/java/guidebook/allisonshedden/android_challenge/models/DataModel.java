@@ -1,6 +1,5 @@
 package guidebook.allisonshedden.android_challenge.models;
 
-import java.util.List;
 
 /**
  * Created by Allison on 4/29/2016.
