@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_get_info){
+            new JSONTask().execute("https://guidebook.com/service/v2/upcomingGuides/");
             return true;
         }
         return super.onOptionsItemSelected(item);
