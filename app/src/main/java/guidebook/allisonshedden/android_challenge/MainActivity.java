@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnHit = (Button)findViewById(R.id.btnGetInfo);
         tvData = (TextView)findViewById(R.id.tvJsonItem);
+        tvData.setMovementMethod(new ScrollingMovementMethod());
 
         btnHit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     String venue = finalObject.getString("venue");
                     String icon = finalObject.getString("icon");
 
-                    finalBufferedData.append("Start Date: " + startDate + "\nEnd Date: " + endDate + "\nName: " + name + "\nUrl: " + gburl + "\nVenue: " + venue + "\nIcon: " + icon + "\n\n");
+                    finalBufferedData.append("Event #"+ (i+1) +"\nStart Date: " + startDate + "\nEnd Date: " + endDate + "\nName: " + name +
+                            "\nUrl: " + gburl + "\nVenue: " + venue + "\nIcon: " + icon + "\n\n");
                 }
                 return finalBufferedData.toString();
 
