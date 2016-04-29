@@ -80,7 +80,11 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject parentObject = new JSONObject(finalJson);
                 JSONArray parentArray = parentObject.getJSONArray("data");
 
-                JSONObject finalObject = parentArray.getJSONObject(0);
+                StringBuffer finalBufferedData = new StringBuffer();
+
+                for(int i=0; i<parentArray.length(); i++) {
+                    JSONObject finalObject = parentArray.getJSONObject(i);
+                    DataModel movieModel = new DataModel();
 
                     String startDate = finalObject.getString("startDate");
                     String endDate = finalObject.getString("endDate");
@@ -89,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
                     String venue = finalObject.getString("venue");
                     String icon = finalObject.getString("icon");
 
-                    return startDate + ", " + endDate + ", " + name + ", " + gburl + ", " + venue + ", " + icon + "\n\n";
+                    finalBufferedData.append(startDate + ", " + endDate + ", " + name + ", " + gburl + ", " + venue + ", " + icon + "\n\n");
+                }
+                return finalBufferedData.toString();
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
