@@ -11,7 +11,8 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></FrameLayout>
+            android:layout_height="wrap_content">
+        </FrameLayout>
 
         <ImageView
             android:layout_width="120dip"
@@ -31,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/event_name"
-                android:id="@+id/tvName" />
+                android:id="@+id/tvName"
+                android:gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -4,7 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="get_info">Get Info</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_get_info">GetInfo</string>
+    <string name="action_get_info">Get Info</string>
 
     <string name="event_name">Event Name</string>
     <string name="event_startdate">Start Date</string>

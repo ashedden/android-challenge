@@ -42,7 +42,6 @@ import guidebook.allisonshedden.android_challenge.models.DataModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvData;
     private ListView lvData;
 
     @Override
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Create default options for usage of Android-Universal-Image-Loader library
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -59,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         ImageLoader.getInstance().init(config);
 
+        //Make listview
         lvData = (ListView)findViewById(R.id.lvData);
 
-        //Make buttons and Text View
+        //Make button
         Button btnHit = (Button)findViewById(R.id.btnGetInfo);
-//        tvData = (TextView)findViewById(R.id.tvJsonItem);
-//        tvData.setMovementMethod(new ScrollingMovementMethod());
 
         btnHit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Class to use AsyncTask to read in JSON information
     public class JSONTask extends AsyncTask<String, String, List<DataModel>> {
         @Override
         protected List<DataModel> doInBackground(String... params) {
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject parentObject = new JSONObject(finalJson);
                 JSONArray parentArray = parentObject.getJSONArray("data");
 
+                //Loop through using DataModel to gather info
                 List<DataModel> dataModelList = new ArrayList<>();
                 for(int i=0; i<parentArray.length(); i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<DataModel> result){
             super.onPostExecute(result);
-//            tvData.setText(result);
+            //Use adapter to update screen with gathered info
             DataAdapter adapter = new DataAdapter(getApplicationContext(), R.layout.eventwithicon, result);
             lvData.setAdapter(adapter);
         }
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Adapter to update screen with info from JSONObjects
     public class DataAdapter extends ArrayAdapter {
 
         public List<DataModel> dataModelList;
@@ -172,16 +174,13 @@ public class MainActivity extends AppCompatActivity {
             dataModelList = objects;
             this.resource = resource;
             inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-
         }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
 
             if(convertView == null){
                 convertView = inflater.inflate(resource, null);
             }
-
             ImageView ivIcon;
             TextView tvName;
             TextView tvDate;
@@ -196,10 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
             tvName.setText(dataModelList.get(position).getName());
             tvDate.setText("Dates:  " + dataModelList.get(position).getStartDate() + " - " + dataModelList.get(position).getEndDate());
-
-//            link.setText(Html.fromHtml(linkText));
             tvUrl.setText("URL:  " + Html.fromHtml("https://guidebook.com" + dataModelList.get(position).getUrl()));
-//            link.setMovementMethod(LinkMovementMethod.getInstance());
             tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
 
             return convertView;
